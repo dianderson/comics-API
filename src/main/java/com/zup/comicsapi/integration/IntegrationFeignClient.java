@@ -11,5 +11,5 @@ import org.springframework.web.bind.annotation.RequestParam;
         name = "import-livro")
 public interface IntegrationFeignClient {
     @GetMapping("/{comicId}")
-    IntegrationComicResponse importLivro(@PathVariable int comicId, @RequestParam(name = "ts") String ts, @RequestParam(name = "apikey") String apikey, @RequestParam(name = "hash") String hash);
+    IntegrationComicResponse getMarvelComic(@PathVariable Long comicId, @RequestParam(name = "ts") String ts, @RequestParam(name = "apikey") String apikey, @RequestParam(name = "hash") String hash);
 }

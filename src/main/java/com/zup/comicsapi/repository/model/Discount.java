@@ -13,20 +13,20 @@ import java.time.DayOfWeek;
 @Data
 @Entity
 @RequiredArgsConstructor
-public class Desconto {
+public class Discount {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull
     private Integer finalIsbn;
     @NotNull
-    private DayOfWeek diaDaSemana;
+    private DayOfWeek dayOfWeek;
     @NotNull
-    private Integer valorDesconto;
+    private Integer discountValue;
 
-    public Desconto(@NotNull Integer finalIsbn, @NotNull DayOfWeek diaDaSemana, @NotNull Integer valorDesconto) {
+    public Discount(@NotNull Integer finalIsbn, @NotNull DayOfWeek dayOfWeek, @NotNull Integer discountValue) {
         this.finalIsbn = finalIsbn;
-        this.diaDaSemana = diaDaSemana;
-        this.valorDesconto = valorDesconto;
+        this.dayOfWeek = dayOfWeek;
+        this.discountValue = discountValue;
     }
 }

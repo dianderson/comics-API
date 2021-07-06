@@ -1,15 +1,13 @@
 package com.zup.comicsapi.integration.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
 
-@Data
+@lombok.Data
 public class IntegrationComicResponse {
     @JsonProperty("code")
-    private int code;
+    private Long code;
     @JsonProperty("status")
     private String status;
-
     @JsonProperty("data")
-    private Dados dados;
+    private Data data;
 }
