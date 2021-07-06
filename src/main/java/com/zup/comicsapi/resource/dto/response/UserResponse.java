@@ -1,11 +1,9 @@
 package com.zup.comicsapi.resource.dto.response;
 
-import com.zup.comicsapi.repository.model.Comic;
 import com.zup.comicsapi.repository.model.User;
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -24,11 +22,7 @@ public class UserResponse {
         response.setEmail(user.getEmail());
         response.setCpf(user.getCpf());
         response.setBirthDate(user.getBirthDate());
-        List<ComicResponse> comics = new ArrayList<>();
-        for (Comic comic : user.getComics()) {
-            comics.add(ComicResponse.of(comic));
-        }
-        response.setComics(comics);
+        response.setComics(ComicResponse.of(user.getComics()));
         return response;
     }
 

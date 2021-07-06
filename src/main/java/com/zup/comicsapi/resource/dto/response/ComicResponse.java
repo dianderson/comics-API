@@ -6,6 +6,7 @@ import com.zup.comicsapi.repository.model.Price;
 import lombok.Data;
 
 import java.time.DayOfWeek;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -29,6 +30,14 @@ public class ComicResponse {
         response.setCreators(comic.getCreators());
         response.setIsbn(comic.getIsbn());
         response.setDescription(comic.getDescription());
+        return response;
+    }
+
+    public static List<ComicResponse> of(List<Comic> comics) {
+        List<ComicResponse> response = new ArrayList<>();
+        for (Comic comic : comics) {
+            response.add(of(comic));
+        }
         return response;
     }
 }

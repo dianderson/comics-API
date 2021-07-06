@@ -1,7 +1,7 @@
 package com.zup.comicsapi.repository.model;
 
 import com.zup.comicsapi.integration.dto.IntegrationComicResponse;
-import com.zup.comicsapi.integration.dto.Result;
+import com.zup.comicsapi.integration.dto.ExternalResult;
 import com.zup.comicsapi.resource.dto.response.ComicResponse;
 import lombok.Data;
 
@@ -37,13 +37,13 @@ public class Comic {
         var livro = new Comic();
         //TODO VALIDAR SE OS DADOS EXISTE
         // SE CODE =200 SEGUE O FLUXO LANÇAR EXCEÇÃO PASSANDO STATUS E CODE
-        for (Result result : response.getData().getResults()) {
-            livro.setExternalComicId(result.getId());
-            livro.setTitle(result.getTitle());
-            livro.setIsbn(result.getIsbn());
-            livro.setDescription(result.getDescription());
-            livro.setPrice(result.getPrices());
-            livro.setCreators(result.getCreators());
+        for (ExternalResult externalResult : response.getExternalData().getExternalResults()) {
+            livro.setExternalComicId(externalResult.getId());
+            livro.setTitle(externalResult.getTitle());
+            livro.setIsbn(externalResult.getIsbn());
+            livro.setDescription(externalResult.getDescription());
+            livro.setPrice(externalResult.getPrices());
+            livro.setCreators(externalResult.getExternalCreators().getCreators());
         }
         return livro;
     }

@@ -1,11 +1,12 @@
 package com.zup.comicsapi.integration.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
 
 import java.util.List;
 
-@lombok.Data
-public class Data {
+@Data
+public class ExternalData {
     @JsonProperty("results")
-    private List<Result> results;
+    private List<ExternalResult> externalResults;
 }
