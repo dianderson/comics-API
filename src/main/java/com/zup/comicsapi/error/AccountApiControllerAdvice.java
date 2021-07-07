@@ -3,10 +3,8 @@ package com.zup.comicsapi.error;
 import com.zup.comicsapi.error.exception.EntityNotFoundException;
 import com.zup.comicsapi.error.model.ErrorHandlerModel;
 import com.zup.comicsapi.error.model.Message;
-import org.hibernate.TransientPropertyValueException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,13 +24,13 @@ public class AccountApiControllerAdvice extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = DataIntegrityViolationException.class)
     public ResponseEntity<Object> handleDataIntegrityViolationException(DataIntegrityViolationException ex, WebRequest request) {
-        final HttpStatus statusResponse = HttpStatus.CONFLICT;
+        final HttpStatus statusResponse = HttpStatus.BAD_REQUEST;
         return super.handleExceptionInternal(
                 ex,
                 ErrorHandlerModel
                         .builder()
                         .errors(List.of(Message.builder().value(ex.getMessage()).build()))
-                        .httpStatus(HttpStatus.CONFLICT.value())
+                        .httpStatus(HttpStatus.BAD_REQUEST.value())
                         .timestamp(System.currentTimeMillis())
                         .build(),
                 new HttpHeaders(),
@@ -49,38 +47,6 @@ public class AccountApiControllerAdvice extends ResponseEntityExceptionHandler {
                         .builder()
                         .errors(List.of(Message.builder().value(ex.getMessage()).build()))
                         .httpStatus(HttpStatus.NOT_FOUND.value())
-                        .timestamp(System.currentTimeMillis())
-                        .build(),
-                new HttpHeaders(),
-                statusResponse,
-                request);
-    }
-
-    @ExceptionHandler(value = EmptyResultDataAccessException.class)
-    public ResponseEntity<Object> emptyResultDataAccess(EmptyResultDataAccessException ex, WebRequest request) {
-        final HttpStatus statusResponse = HttpStatus.NO_CONTENT;
-        return super.handleExceptionInternal(
-                ex,
-                ErrorHandlerModel
-                        .builder()
-                        .errors(List.of(Message.builder().value(ex.getMessage()).build()))
-                        .httpStatus(HttpStatus.NO_CONTENT.value())
-                        .timestamp(System.currentTimeMillis())
-                        .build(),
-                new HttpHeaders(),
-                statusResponse,
-                request);
-    }
-
-    @ExceptionHandler(value = TransientPropertyValueException.class)
-    public ResponseEntity<Object> transientPropertyValue(TransientPropertyValueException ex, WebRequest request) {
-        final HttpStatus statusResponse = HttpStatus.BAD_REQUEST;
-        return super.handleExceptionInternal(
-                ex,
-                ErrorHandlerModel
-                        .builder()
-                        .errors(List.of(Message.builder().value(ex.getMessage()).build()))
-                        .httpStatus(HttpStatus.BAD_REQUEST.value())
                         .timestamp(System.currentTimeMillis())
                         .build(),
                 new HttpHeaders(),
@@ -148,6 +114,4 @@ public class AccountApiControllerAdvice extends ResponseEntityExceptionHandler {
                 Stream.concat(fv.entrySet().stream(), args.entrySet().stream());
         return combined.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
-
-
 }

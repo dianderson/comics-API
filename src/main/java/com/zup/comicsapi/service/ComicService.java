@@ -4,10 +4,7 @@ import com.zup.comicsapi.integration.IntegrationFeignClient;
 import com.zup.comicsapi.integration.dto.IntegrationComicResponse;
 import com.zup.comicsapi.repository.ComicRepository;
 import com.zup.comicsapi.repository.PriceRepository;
-import com.zup.comicsapi.repository.model.Creator;
-import com.zup.comicsapi.repository.model.Discount;
-import com.zup.comicsapi.repository.model.Comic;
-import com.zup.comicsapi.repository.model.Price;
+import com.zup.comicsapi.repository.model.*;
 import com.zup.comicsapi.resource.dto.response.ComicResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
@@ -40,40 +37,48 @@ public class ComicService {
     }
 
     public IntegrationComicResponse getMarvelComic(Long comicId) {
-        return integrationFeignClient.getMarvelComic(comicId, "1", apikey, hash);
+        var comicResponse = integrationFeignClient.getMarvelComic(comicId, "1", apikey, hash);
+        //TODO VALIDAR SE OS DADOS EXISTE
+        // SE CODE =200 SEGUE O FLUXO LANÇAR EXCEÇÃO PASSANDO STATUS E CODE
+        if (comicResponse.getCode() == 200) {
+            return comicResponse;
+        } else {
+            //new EntityNotFoundException(comicResponse.getStatus());
+            return null;
+        }
     }
 
     public ComicResponse addToUser(Long comicId, Long userId) {
         var foundComic = comicRepository.findByExternalComicId(comicId);
+        var foundUser = userService.getUserById(userId);
         if (foundComic.isPresent()) {
-            var foundUser = userService.getUserById(userId);
             var comic = foundComic.get();
             comic.addUser(foundUser.getId());
             return ComicResponse.of(comicRepository.save(comic));
         } else {
             var newComic = Comic.of(getMarvelComic(comicId));
-
-            for (Price preco : newComic.getPrice()) {
-                priceRepository.save(preco);
+            for (Price price : newComic.getPrice()) {
+                priceRepository.save(price);
             }
             for (Creator creator : newComic.getCreators()) {
                 creatorService.save(creator);
             }
+            newComic.addUser(foundUser.getId());
             return ComicResponse.of(comicRepository.save(newComic));
         }
     }
 
     public List<ComicResponse> calculateComicsDiscount(List<ComicResponse> comics) {
-        for (ComicResponse comic : comics) {
-            String isbn = comic.getIsbn();
+        for (ComicResponse comicResponse : comics) {
+            String isbn = comicResponse.getIsbn();
             if (!isbn.isBlank()) {
                 Integer lastIsbn = Character.getNumericValue(isbn.charAt(isbn.length() - 1));
                 Discount discount = discountService.findByFinalIsbn(lastIsbn);
-                comic.setDayOfWeek(discount.getDayOfWeek());
-                comic.setDiscountStatus(discount.getDayOfWeek() == LocalDate.now().getDayOfWeek());
-                if (comic.isDiscountStatus()) {
-                    for (Price preco : comic.getPrices()) {
-                        preco.setPrice(preco.getPrice() * (1F - discount.getDiscountValue() / 100F));
+                comicResponse.setDayOfWeek(discount.getDayOfWeek());
+                comicResponse.setDiscountStatus(discount.getDayOfWeek() == LocalDate.now().getDayOfWeek());
+                if (comicResponse.isDiscountStatus()) {
+                    for (Price price : comicResponse.getPrices()) {
+                        price.setPrice(price.getPrice() * (1F - discount.getDiscountValue() / 100F));
                     }
                 }
             }

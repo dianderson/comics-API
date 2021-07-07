@@ -25,6 +25,7 @@ public class UserResource {
     }
 
     @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public UserResponse findById(@PathVariable Long id) {
         return userService.findById(id);
     }

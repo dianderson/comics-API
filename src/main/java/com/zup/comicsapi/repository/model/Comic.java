@@ -30,13 +30,14 @@ public class Comic {
     @NotBlank
     @Column(length = 1500)
     private String description;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_comic",
+            joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "comic_id")})
     private List<User> users;
 
     public static Comic of(IntegrationComicResponse response) {
         var livro = new Comic();
-        //TODO VALIDAR SE OS DADOS EXISTE
-        // SE CODE =200 SEGUE O FLUXO LANÇAR EXCEÇÃO PASSANDO STATUS E CODE
         for (ExternalResult externalResult : response.getExternalData().getExternalResults()) {
             livro.setExternalComicId(externalResult.getId());
             livro.setTitle(externalResult.getTitle());

@@ -26,7 +26,7 @@ public class User {
     private String cpf;
     @NotNull
     private LocalDate birthDate;
-    @ManyToMany
+    @ManyToMany(mappedBy = "users")
     private List<Comic> comics;
 
     public User(Long id) {
@@ -52,7 +52,6 @@ public class User {
         user.setEmail(request.getEmail());
         user.setCpf(request.getCpf());
         user.setBirthDate(request.getBirthDate());
-        //TODO usuario.setComics(request.getComics());
         return user;
     }
 }

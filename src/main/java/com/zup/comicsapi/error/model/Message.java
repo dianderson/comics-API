@@ -15,4 +15,3 @@ public class Message {
     @Builder.Default
     private Map<String, String> variables = Collections.emptyMap();
 }
-

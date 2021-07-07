@@ -3,10 +3,8 @@ package com.zup.comicsapi.resource;
 import com.zup.comicsapi.resource.dto.response.ComicResponse;
 import com.zup.comicsapi.service.ComicService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -14,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ComicResource {
     private final ComicService comicService;
 
+    @ResponseStatus(HttpStatus.OK)
     @PostMapping("/{id}/{user_id}")
     public ComicResponse addToUser(@PathVariable("id") Long comicId, @PathVariable("user_id") Long userId) {
         return comicService.addToUser(comicId, userId);

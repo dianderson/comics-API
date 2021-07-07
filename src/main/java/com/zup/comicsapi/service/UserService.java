@@ -2,9 +2,12 @@ package com.zup.comicsapi.service;
 
 import com.zup.comicsapi.repository.UserRepository;
 import com.zup.comicsapi.repository.model.User;
+import com.zup.comicsapi.resource.dto.response.ComicResponse;
 import com.zup.comicsapi.resource.dto.response.UserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -18,7 +21,8 @@ public class UserService {
 
     public UserResponse findById(Long userId) {
         var foundUser = getUserById(userId);
-        foundUser.setComics(comicService.calculateComicsDiscount(foundUser.getComics()));
+        List<ComicResponse> returnComics = comicService.calculateComicsDiscount(foundUser.getComics());
+        foundUser.setComics(returnComics);
         return foundUser;
     }
 
