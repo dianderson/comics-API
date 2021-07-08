@@ -7,6 +7,7 @@ import com.zup.comicsapi.resource.dto.response.UserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
@@ -30,6 +31,6 @@ public class UserService {
         return userRepository
                 .findById(id)
                 .map(UserResponse::of)
-                .orElseThrow(() -> new RuntimeException(String.format("User with id %s not found", id)));
+                .orElseThrow(() -> new EntityNotFoundException(String.format("User with id %s not found", id)));
     }
 }

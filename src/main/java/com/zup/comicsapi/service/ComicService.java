@@ -38,8 +38,6 @@ public class ComicService {
 
     public IntegrationComicResponse getMarvelComic(Long comicId) {
         var comicResponse = integrationFeignClient.getMarvelComic(comicId, "1", apikey, hash);
-        //TODO VALIDAR SE OS DADOS EXISTE
-        // SE CODE =200 SEGUE O FLUXO LANÇAR EXCEÇÃO PASSANDO STATUS E CODE
         if (comicResponse.getCode() == 200) {
             return comicResponse;
         } else {
