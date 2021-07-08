@@ -37,13 +37,7 @@ public class ComicService {
     }
 
     public IntegrationComicResponse getMarvelComic(Long comicId) {
-        var comicResponse = integrationFeignClient.getMarvelComic(comicId, "1", apikey, hash);
-        if (comicResponse.getCode() == 200) {
-            return comicResponse;
-        } else {
-            //new EntityNotFoundException(comicResponse.getStatus());
-            return null;
-        }
+        return integrationFeignClient.getMarvelComic(comicId, "1", apikey, hash);
     }
 
     public ComicResponse addToUser(Long comicId, Long userId) {
