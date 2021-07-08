@@ -15,6 +15,7 @@ public class ComicResource {
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/{id}/{user_id}")
     public ComicResponse addToUser(@PathVariable("id") Long comicId, @PathVariable("user_id") Long userId) {
+        System.out.println("comicID= " + comicId + " cuserID= " + userId);
         return comicService.addToUser(comicId, userId);
     }
 }
